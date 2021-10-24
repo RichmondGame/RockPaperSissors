@@ -1,9 +1,6 @@
 package RockPaperSissors;
 
-import java.util.Arrays;
-import java.util.InputMismatchException;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     static int playerWins;
@@ -12,7 +9,6 @@ public class Main {
     public static void main(String[] arg) throws InterruptedException {
         playerWins = 0;
         computerWins = 0;
-        Hands.Paper.toString();
 
         while (playerWins < 3 && computerWins < 3 ) {
             playRound();
@@ -83,43 +79,28 @@ public class Main {
         String win = "You Win!";
         String lose = "You Lose";
         String tryAgain = "Please try again. (1-3)";
-        int[] availableChoices = new int[] {0,1,2};
-        boolean isValidChoice = Arrays.stream(availableChoices).anyMatch(i -> i == playersHand);
+        List availableChoices = Arrays.asList(0,1,2);
+        ArrayList<Integer> choicesArrayList = new ArrayList<>();
+        choicesArrayList.addAll(availableChoices);
 
-        if (!isValidChoice) {
+        if (!choicesArrayList.contains(playersHand)) {
             return tryAgain;
         }
         if (playersHand == computersHand) {
             return tie;
         }
-        if (playersHand == 0) {
-            if (computersHand == 1) {
-                computerWins++;
-                return lose;
-            } else {
-                playerWins++;
-                return win;
-            }
+// By removing the players choice, this leaves two options.
+// The first is options the player always loses.
+// The second option the player always wins.
+        choicesArrayList.remove(playersHand);
+
+        if (computersHand == choicesArrayList.get(0)) {
+            computerWins++;
+            return lose;
+        } else {
+            playerWins++;
+            return win;
         }
-        if (playersHand == 1) {
-            if (computersHand == 2) {
-                computerWins++;
-                return lose;
-            } else {
-                playerWins++;
-                return win;
-            }
-        }
-        if (playersHand == 2) {
-            if (computersHand == 0) {
-                computerWins++;
-                return lose;
-            } else {
-                playerWins++;
-                return win;
-            }
-        }
-        return null;
     }
 
     private static int getRandomNumber() {
